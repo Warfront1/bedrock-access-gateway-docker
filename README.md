@@ -17,7 +17,9 @@ docker run \
   -p 54123:8080 \
   -d warfront1bag/bedrock-access-gateway:latest
 ```
-> **Tip:** Change `API_KEY=bedrock` to a custom secret value.
+> [!WARNING]
+> Set the `API_KEY` environment variable to a long, random secret, and never commit real secrets to Git.
+> Do **not** use a predictable value such as `bedrock`.
 
 ### Configuration in third party tools (e.g., Open WebUI)
 - **Base URL:** `http://localhost:54123/api/v1`
