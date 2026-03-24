@@ -33,11 +33,19 @@ for COMMIT_HASH in $COMMITS; do
     fi
     
     echo "Image for $COMMIT_HASH not found. Building multi-arch..."
+    git reset --hard
+    git clean -fdx
     git checkout "$COMMIT_HASH"
+
+    # Check if the Dockerfile exists (simple check in src directory)
+    if [ ! -f "src/Dockerfile_ecs" ]; then
+      echo "src/Dockerfile_ecs not found in commit $COMMIT_HASH. Skipping."
+      continue
+    fi
 
     cd src
     docker buildx build . \
-      -f Dockerfile_ecs \
+      -f "Dockerfile_ecs" \
       --platform linux/amd64,linux/arm64 \
       -t "$DOCKERHUB_REPO:$COMMIT_HASH" \
       --push
@@ -45,12 +53,10 @@ for COMMIT_HASH in $COMMITS; do
     if [ "$COMMIT_HASH" = "$REMOTE_MAIN_TAG" ]; then
         echo "Tagging $COMMIT_HASH as latest"
         docker buildx build . \
-          -f Dockerfile_ecs \
+          -f "Dockerfile_ecs" \
           --platform linux/amd64,linux/arm64 \
           -t "$DOCKERHUB_REPO:latest" \
           --push
     fi
-    
-    # Return to build root for next commit
-    cd ..
+    cd "$BUILD_DIR"
 done
