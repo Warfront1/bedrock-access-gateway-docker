@@ -18,7 +18,7 @@ docker run \
   -d warfront1bag/bedrock-access-gateway:latest
 ```
 > [!WARNING]
-> Set the `API_KEY` environment variable to a long, random secret, and never commit real secrets to Git.
+> Set the `API_KEY` environment variable to a long, random secret, and never commit real secrets to Git.  
 > Do **not** use a predictable value such as `bedrock`.
 
 ### Configuration in third party tools (e.g., Open WebUI)
